@@ -6,6 +6,7 @@ using inscription.Models;
 using inscription.Models.Enums;
 using inscription.Repository.Interfaces;
 using inscription.Services.Interfaces;
+
 namespace inscription.Services.impl
 {
     public class InscriptionServiceImpl : IInscriptionServiceInterface
@@ -24,7 +25,18 @@ namespace inscription.Services.impl
         public void Inscrire(int etudiantId, int classeId)
         {
             var anneeEnCours = _context.AnneeScolaires
-                .First(a => a.Statut == StatutAnneeScolaire.EnCours);
+                .FirstOrDefault(a => a.Statut == StatutAnneeScolaire.EnCours);
+
+            if (anneeEnCours == null)
+                throw new Exception("Aucune année scolaire en cours.");
+
+            bool dejaInscrit = _repository
+                .ExisteInscription(etudiantId, anneeEnCours.Id);
+
+            if (dejaInscrit)
+                throw new InvalidOperationException(
+                    "L'étudiant est déjà inscrit pour l'année scolaire en cours."
+                );
 
             var inscription = new Inscription
             {

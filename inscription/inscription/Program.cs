@@ -1,4 +1,3 @@
-// Program.cs
 using Microsoft.EntityFrameworkCore;
 using inscription.Data;
 using inscription.Services;
@@ -13,27 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configuration de la base de données avec Entity Framework
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
-// Alternative avec SQLite pour développement:
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseSqlite(
-//         builder.Configuration.GetConnectionString("SQLiteConnection")
-//     )
-// );
-
-// Correction : On lie l'Interface à sa Classe d'implémentation
 builder.Services.AddScoped<IInscriptionRepositoryInterface, InscriptionRepositoryImpl>(); 
 builder.Services.AddScoped<IInscriptionServiceInterface, InscriptionServiceImpl>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -55,7 +44,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Inscription}/{action=Index}/{id?}");
 
-// Initialiser la base de données
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

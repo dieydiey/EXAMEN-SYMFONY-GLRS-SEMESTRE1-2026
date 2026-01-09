@@ -1,66 +1,81 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace inscription.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "AnneeScolaires",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Libelle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Libelle = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Statut = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AnneeScolaires", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Classes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Libelle = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Libelle = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Classes", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Etudiants",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Matricule = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Prenom = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Matricule = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nom = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Prenom = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Etudiants", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Inscriptions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateInscription = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DateInscription = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     EtudiantId = table.Column<int>(type: "int", nullable: false),
                     ClasseId = table.Column<int>(type: "int", nullable: false),
                     AnneeScolaireId = table.Column<int>(type: "int", nullable: false)
@@ -86,12 +101,31 @@ namespace inscription.Migrations
                         principalTable: "Etudiants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
                 table: "AnneeScolaires",
                 columns: new[] { "Id", "Libelle", "Statut" },
                 values: new object[] { 1, "2025-2026", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "Id", "Code", "Libelle" },
+                values: new object[,]
+                {
+                    { 1, "L1", "Licence 1 Informatique" },
+                    { 2, "L2", "Licence 2 Informatique" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Etudiants",
+                columns: new[] { "Id", "Matricule", "Nom", "Prenom" },
+                values: new object[,]
+                {
+                    { 1, "ET001", "DIOP", "Aliou" },
+                    { 2, "ET002", "NDIAYE", "Aminata" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscriptions_AnneeScolaireId",
@@ -104,9 +138,10 @@ namespace inscription.Migrations
                 column: "ClasseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inscriptions_EtudiantId",
+                name: "IX_Inscriptions_EtudiantId_AnneeScolaireId",
                 table: "Inscriptions",
-                column: "EtudiantId");
+                columns: new[] { "EtudiantId", "AnneeScolaireId" },
+                unique: true);
         }
 
         /// <inheritdoc />

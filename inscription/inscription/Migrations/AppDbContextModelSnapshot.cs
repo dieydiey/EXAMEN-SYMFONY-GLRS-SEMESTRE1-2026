@@ -18,9 +18,9 @@ namespace inscription.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("inscription.Models.AnneeScolaire", b =>
                 {
@@ -28,11 +28,11 @@ namespace inscription.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Libelle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Statut")
                         .HasColumnType("int");
@@ -56,19 +56,33 @@ namespace inscription.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Libelle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("Classes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "L1",
+                            Libelle = "Licence 1 Informatique"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "L2",
+                            Libelle = "Licence 2 Informatique"
+                        });
                 });
 
             modelBuilder.Entity("inscription.Models.Etudiant", b =>
@@ -77,23 +91,39 @@ namespace inscription.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Matricule")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nom")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("Etudiants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Matricule = "ET001",
+                            Nom = "DIOP",
+                            Prenom = "Aliou"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Matricule = "ET002",
+                            Nom = "NDIAYE",
+                            Prenom = "Aminata"
+                        });
                 });
 
             modelBuilder.Entity("inscription.Models.Inscription", b =>
@@ -102,7 +132,7 @@ namespace inscription.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AnneeScolaireId")
                         .HasColumnType("int");
@@ -111,7 +141,7 @@ namespace inscription.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateInscription")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("EtudiantId")
                         .HasColumnType("int");
@@ -122,7 +152,8 @@ namespace inscription.Migrations
 
                     b.HasIndex("ClasseId");
 
-                    b.HasIndex("EtudiantId");
+                    b.HasIndex("EtudiantId", "AnneeScolaireId")
+                        .IsUnique();
 
                     b.ToTable("Inscriptions");
                 });

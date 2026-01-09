@@ -21,8 +21,10 @@ namespace inscription.Repositoriy.impl
             _context.Inscriptions.Add(inscription);
         }
 
-        public IEnumerable<Inscription> GetByClasse(int classeId)
+      public IEnumerable<Inscription> GetByClasse(int classeId)
         {
+            if (classeId <= 0) return new List<Inscription>();
+
             return _context.Inscriptions
                 .Include(i => i.Etudiant)
                 .Include(i => i.Classe)
@@ -35,5 +37,13 @@ namespace inscription.Repositoriy.impl
         {
             _context.SaveChanges();
         }
+
+        public bool ExisteInscription(int etudiantId, int anneeScolaireId)
+        {
+            return _context.Inscriptions.Any(i =>
+                i.EtudiantId == etudiantId &&
+                i.AnneeScolaireId == anneeScolaireId);
+        }
+
     }
 }

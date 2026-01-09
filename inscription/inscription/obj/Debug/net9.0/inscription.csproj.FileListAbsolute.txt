@@ -36,6 +36,8 @@ C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\M
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\MySqlConnector.dll
+C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\System.ClientModel.dll
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\System.CodeDom.dll
 C:\EXAMEN-SYMFONY-GLRS-SEMESTRE1-2026\inscription\inscription\bin\Debug\net9.0\System.Composition.AttributedModel.dll
